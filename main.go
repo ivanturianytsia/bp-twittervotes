@@ -17,7 +17,7 @@ var db *mgo.Session
 
 func dialdb() error {
 	var err error
-	log.Println("dialing mongodb: localhost")
+	log.Println("dialing mongodb: db")
 	db, err = mgo.Dial("db")
 	return err
 }

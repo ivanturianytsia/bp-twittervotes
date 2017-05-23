@@ -15,7 +15,7 @@ function build_binary_mac {
   start $STEPNAME
   go get -v -d -t
   go test --cover -v ./...
-  go build -v -o bin/twittervotes_mac .
+  go build -v -o bin/${APPNAME}_mac .
   complete $STEPNAME
 }
 function build_binary_alpine {
@@ -23,7 +23,7 @@ function build_binary_alpine {
   start $STEPNAME
   go get -v -d -t
   go test --cover -v ./...
-  CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -v -o bin/twittervotes_alpine .
+  CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -v -o bin/${APPNAME}_alpine .
   complete $STEPNAME
 }
 function build_binaries {
@@ -34,16 +34,16 @@ function build_binaries {
 function build_image {
   STEPNAME="Building Docker image"
   start $STEPNAME
-  docker build -t ivanturianytsia/bp-twittervotes:latest .
+  docker build -t ivanturianytsia/bp-${APPNAME}:latest .
   complete $STEPNAME
 }
 function push_image {
   STEPNAME="Push Docker image to Docker Hub"
   start $STEPNAME
-  docker push ivanturianytsia/bp-twittervotes:latest
+  docker push ivanturianytsia/bp-${APPNAME}:latest
 
-  docker tag ivanturianytsia/bp-twittervotes:latest ivanturianytsia/bp-twittervotes:$HASH
-  docker push ivanturianytsia/bp-twittervotes:$HASH
+  docker tag ivanturianytsia/bp-${APPNAME}:latest ivanturianytsia/bp-${APPNAME}:$HASH
+  docker push ivanturianytsia/bp-${APPNAME}:$HASH
   complete $STEPNAME
 }
 
@@ -52,8 +52,8 @@ function deploy {
   start $STEPNAME
 
   docker service update \
-    --image ivanturianytsia/bp-twittervotes:$HASH \
-    bp-twittervotes
+    --image ivanturianytsia/bp-${APPNAME}:$HASH \
+    bp-${APPNAME}
 
   complete $STEPNAME
 }
